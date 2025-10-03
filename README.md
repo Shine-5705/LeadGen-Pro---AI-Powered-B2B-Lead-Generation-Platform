@@ -170,21 +170,4 @@ Pull requests welcome! Please open an issue first to discuss major changes.
 
 MIT License
 
----
 
-## 🙋 FAQ
-
-**Q:** Can I use my own OpenAI API key?  
-**A:** Yes! Just set it in your `.env` file.
-
-**Q:** Is scraping legal?  
-**A:** Only scrape public data and respect robots.txt and terms of service.
-
-**Q:** Can I deploy this to production?  
-**A:** Yes, but review security, rate limits, and compliance before doing so.
-
----
-
-## 📬 Contact
-
-For questions or demo requests, email: [support@leadgenpro.com](mailto:support@leadgenpro.com)
