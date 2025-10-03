@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log*
+.env
+.DS_Store
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+client/build
+client/node_modules
+server/node_modules

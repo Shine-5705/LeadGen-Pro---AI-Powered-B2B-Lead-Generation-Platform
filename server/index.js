@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 const { connectDB } = require('./models');
 require('dotenv').config();
 
@@ -36,6 +37,15 @@ app.use('/api/scraping', require('./routes/scraping'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/export', require('./routes/export'));
 app.use('/api/google', require('./routes/google-search'));
+
+// Serve static files from React build in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 // Health check
 app.get('/api/health', (req, res) => {

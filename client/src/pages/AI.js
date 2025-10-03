@@ -3,7 +3,6 @@ import axios from 'axios';
 import { 
   Bot, 
   Mail, 
-  MessageSquare, 
   Copy, 
   Send,
   RefreshCw,
