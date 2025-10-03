@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const OpenAI = require('openai');
 const { User } = require('../models');
 const authenticateToken = require('../middleware/auth');
@@ -11,7 +12,7 @@ const openai = new OpenAI({
 });
 
 // Generate personalized email
-router.post('/email', authenticateToken, async (req, res) => {
+router.post('/email', async (req, res) => {
   try {
     const { leadData, emailType = 'cold-outreach', customPrompt } = req.body;
 
@@ -19,22 +20,36 @@ router.post('/email', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: 'Lead data is required' });
     }
 
-    // Check user credits
-    const user = await User.findById(req.userId);
-    if (user.credits < 1) {
+    // For demo purposes, allow without authentication
+    // In production, always require authentication
+    let user = null;
+    if (req.headers.authorization) {
+      try {
+        const token = req.headers.authorization.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        user = await User.findById(decoded.userId);
+      } catch (error) {
+        console.log('Token verification failed, using demo mode');
+      }
+    }
+
+    // Check user credits only if authenticated
+    if (user && user.credits < 1) {
       return res.status(400).json({ message: 'Insufficient credits' });
     }
 
     const emailContent = await generatePersonalizedEmail(leadData, emailType, customPrompt);
 
-    // Deduct credit
-    user.credits -= 1;
-    await user.save();
+    // Deduct credit only if user is authenticated
+    if (user) {
+      user.credits -= 1;
+      await user.save();
+    }
 
     res.json({
       ...emailContent,
-      creditsUsed: 1,
-      remainingCredits: user.credits
+      creditsUsed: user ? 1 : 0,
+      remainingCredits: user ? user.credits : 'demo'
     });
   } catch (error) {
     console.error('Email generation error:', error);

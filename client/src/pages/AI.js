@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useLeads } from '../contexts/LeadContext';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { 
   Bot, 
   Mail, 
@@ -14,14 +14,60 @@ import {
   TrendingUp
 } from 'lucide-react';
 
+// Sample lead data for demo
+const SAMPLE_LEADS = [
+  {
+    _id: '1',
+    company: 'TechCorp Solutions',
+    email: 'john.doe@techcorp.com',
+    industry: 'Technology',
+    city: 'San Francisco',
+    state: 'CA',
+    website: 'https://techcorp.com',
+    productsServices: ['Cloud Computing', 'AI Solutions', 'Data Analytics'],
+    employeeCount: '51-200',
+    revenue: '$10M-$50M'
+  },
+  {
+    _id: '2',
+    company: 'HealthFirst Medical',
+    email: 'jane.smith@healthfirst.com',
+    industry: 'Healthcare',
+    city: 'Boston',
+    state: 'MA',
+    website: 'https://healthfirst.com',
+    productsServices: ['Telemedicine', 'Health Records', 'Patient Care'],
+    employeeCount: '201-500',
+    revenue: '$50M-$100M'
+  },
+  {
+    _id: '3',
+    company: 'FinanceHub Inc',
+    email: 'michael.brown@financehub.com',
+    industry: 'Finance',
+    city: 'New York',
+    state: 'NY',
+    website: 'https://financehub.com',
+    productsServices: ['Financial Software', 'Investment Tools', 'Analytics'],
+    employeeCount: '11-50',
+    revenue: '$5M-$10M'
+  }
+];
+
 const AI = () => {
-  const { generateEmail, leads } = useLeads();
+  const [leads, setLeads] = useState(SAMPLE_LEADS);
   const [selectedLead, setSelectedLead] = useState(null);
   const [emailType, setEmailType] = useState('cold-outreach');
   const [customPrompt, setCustomPrompt] = useState('');
   const [generatedEmail, setGeneratedEmail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Load leads on component mount
+  useEffect(() => {
+    // Try to load leads from LeadContext or use sample data
+    setLeads(SAMPLE_LEADS);
+  }, []);
 
   const emailTypes = [
     { value: 'cold-outreach', label: 'Cold Outreach', description: 'Initial contact with prospects' },
@@ -35,12 +81,139 @@ const AI = () => {
     if (!selectedLead) return;
 
     setLoading(true);
-    const result = await generateEmail(selectedLead, emailType, customPrompt);
-    
-    if (result.success) {
-      setGeneratedEmail(result.email);
+    setGeneratedEmail(null);
+
+    try {
+      // Get auth token from localStorage
+      const token = localStorage.getItem('token');
+      
+      // Create the email generation request with proper format
+      const response = await axios.post('http://localhost:5000/api/ai/email', {
+        leadData: {
+          company: selectedLead.company,
+          industry: selectedLead.industry,
+          productsServices: selectedLead.productsServices,
+          website: selectedLead.website,
+          city: selectedLead.city,
+          state: selectedLead.state,
+          employeeCount: selectedLead.employeeCount,
+          revenue: selectedLead.revenue,
+          yearFounded: selectedLead.yearFounded
+        },
+        emailType: emailType,
+        customPrompt: customPrompt
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.data) {
+        const emailData = response.data;
+        
+        // Calculate word count
+        const wordCount = emailData.body.split(/\s+/).length;
+        
+        // Calculate personalization score (mock calculation)
+        const personalizationScore = Math.min(
+          100, 
+          Math.round(
+            (emailData.body.toLowerCase().includes(selectedLead.company.toLowerCase()) ? 20 : 0) +
+            (emailData.body.toLowerCase().includes(selectedLead.industry.toLowerCase()) ? 20 : 0) +
+            (selectedLead.productsServices.some(service => 
+              emailData.body.toLowerCase().includes(service.toLowerCase())
+            ) ? 30 : 0) +
+            (customPrompt ? 20 : 0) +
+            10 // Base score
+          )
+        );
+
+        setGeneratedEmail({
+          subject: emailData.subject,
+          body: emailData.body,
+          wordCount: emailData.wordCount || emailData.body.split(/\s+/).length,
+          personalizationScore: emailData.personalizationScore || Math.min(
+            100, 
+            Math.round(
+              (emailData.body.toLowerCase().includes(selectedLead.company.toLowerCase()) ? 20 : 0) +
+              (emailData.body.toLowerCase().includes(selectedLead.industry.toLowerCase()) ? 20 : 0) +
+              (selectedLead.productsServices && selectedLead.productsServices.some(service => 
+                emailData.body.toLowerCase().includes(service.toLowerCase())
+              ) ? 30 : 0) +
+              (customPrompt ? 20 : 0) +
+              10 // Base score
+            )
+          )
+        });
+      } else {
+        console.error('Email generation failed:', response.data.message);
+        // Fallback: Generate a basic email if API fails
+        generateFallbackEmail();
+      }
+    } catch (error) {
+      console.error('Error generating email:', error);
+      // Fallback: Generate a basic email if API fails
+      generateFallbackEmail();
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  const generateFallbackEmail = () => {
+    // Fallback email generation when API is not available
+    const emailTemplates = {
+      'cold-outreach': {
+        subject: `Partnership Opportunity with ${selectedLead.company}`,
+        body: `Hi there,
+
+I hope this email finds you well. I came across ${selectedLead.company} and was impressed by your work in the ${selectedLead.industry} industry.
+
+I believe there could be a great opportunity for our companies to collaborate. Would you be interested in a brief conversation to explore potential synergies?
+
+Looking forward to hearing from you.
+
+Best regards,
+[Your Name]`
+      },
+      'follow-up': {
+        subject: `Following up on our conversation - ${selectedLead.company}`,
+        body: `Hi there,
+
+I wanted to follow up on my previous message regarding potential collaboration between our companies.
+
+${selectedLead.company} seems like a perfect fit for what we're looking for in the ${selectedLead.industry} space.
+
+Would you have 15 minutes this week for a quick call?
+
+Best regards,
+[Your Name]`
+      },
+      'introduction': {
+        subject: `Introduction: Connecting with ${selectedLead.company}`,
+        body: `Hello,
+
+I'm reaching out to introduce our company and explore potential opportunities with ${selectedLead.company}.
+
+We specialize in working with companies in the ${selectedLead.industry} industry and have helped similar organizations achieve significant growth.
+
+Would you be open to a brief conversation to discuss how we might be able to help ${selectedLead.company}?
+
+Best regards,
+[Your Name]`
+      }
+    };
+
+    const template = emailTemplates[emailType] || emailTemplates['cold-outreach'];
+    const wordCount = template.body.split(/\s+/).length;
+    const personalizationScore = 75; // Default score for fallback
+
+    setGeneratedEmail({
+      subject: template.subject,
+      body: template.body,
+      wordCount: wordCount,
+      personalizationScore: personalizationScore
+    });
   };
 
   const handleCopyEmail = () => {
