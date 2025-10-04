@@ -8,10 +8,7 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start",
-    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
-    "build-all": "npm run install-all && npm run build",
-    "deploy": "npm run build-all"
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
   },
   "keywords": ["lead-generation", "b2b", "sales", "ai"],
   "author": "Caprae Capital",

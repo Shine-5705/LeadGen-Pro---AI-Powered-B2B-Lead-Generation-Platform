@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { 
   Search, 
   Filter, 
@@ -8,12 +8,16 @@ import {
   Globe,
   MapPin,
   Users,
+  ExternalLink,
+  MessageSquare,
   Zap,
+  Star,
   Send,
   Copy,
   Linkedin,
   Sparkles,
-  X
+  X,
+  CheckCircle
 } from 'lucide-react';
 
 // Sample Lead Data
@@ -211,7 +215,7 @@ const LeadsEnhanced = () => {
   }, []);
 
   // Calculate match score for each lead based on user preferences
-  const calculateMatchScore = useCallback((lead) => {
+  const calculateMatchScore = (lead) => {
     if (!userPreferences) return 0;
 
     let score = 0;
@@ -259,7 +263,7 @@ const LeadsEnhanced = () => {
     }
 
     return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
-  }, [userPreferences]);
+  };
 
   // Filter and sort leads
   const filteredLeads = useMemo(() => {
@@ -299,7 +303,7 @@ const LeadsEnhanced = () => {
     result.sort((a, b) => b.matchScore - a.matchScore);
 
     return result;
-  }, [leads, searchTerm, statusFilter, industryFilter, userPreferences, showMatchesOnly, calculateMatchScore]);
+  }, [leads, searchTerm, statusFilter, industryFilter, userPreferences, showMatchesOnly]);
 
   const handleAIGenerate = (lead, type) => {
     setSelectedLead(lead);

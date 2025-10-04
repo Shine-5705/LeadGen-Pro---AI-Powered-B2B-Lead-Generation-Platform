@@ -110,6 +110,23 @@ const AI = () => {
 
       if (response.data) {
         const emailData = response.data;
+        
+        // Calculate word count
+        const wordCount = emailData.body.split(/\s+/).length;
+        
+        // Calculate personalization score (mock calculation)
+        const personalizationScore = Math.min(
+          100, 
+          Math.round(
+            (emailData.body.toLowerCase().includes(selectedLead.company.toLowerCase()) ? 20 : 0) +
+            (emailData.body.toLowerCase().includes(selectedLead.industry.toLowerCase()) ? 20 : 0) +
+            (selectedLead.productsServices.some(service => 
+              emailData.body.toLowerCase().includes(service.toLowerCase())
+            ) ? 30 : 0) +
+            (customPrompt ? 20 : 0) +
+            10 // Base score
+          )
+        );
 
         setGeneratedEmail({
           subject: emailData.subject,
@@ -120,7 +137,7 @@ const AI = () => {
             Math.round(
               (emailData.body.toLowerCase().includes(selectedLead.company.toLowerCase()) ? 20 : 0) +
               (emailData.body.toLowerCase().includes(selectedLead.industry.toLowerCase()) ? 20 : 0) +
-              (selectedLead.productsServices.some(service => 
+              (selectedLead.productsServices && selectedLead.productsServices.some(service => 
                 emailData.body.toLowerCase().includes(service.toLowerCase())
               ) ? 30 : 0) +
               (customPrompt ? 20 : 0) +

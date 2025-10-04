@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from './AuthContext';
@@ -34,7 +34,7 @@ export const LeadProvider = ({ children }) => {
   const { isAuthenticated } = useAuth();
 
   // Fetch leads
-  const fetchLeads = useCallback(async (newFilters = filters) => {
+  const fetchLeads = async (newFilters = filters) => {
     if (!isAuthenticated) return;
     
     setLoading(true);
@@ -52,10 +52,10 @@ export const LeadProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [filters, isAuthenticated]);
+  };
 
   // Fetch lead statistics
-  const fetchStats = useCallback(async () => {
+  const fetchStats = async () => {
     if (!isAuthenticated) return;
     
     try {
@@ -64,7 +64,7 @@ export const LeadProvider = ({ children }) => {
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     }
-  }, [isAuthenticated]);
+  };
 
   // Create lead
   const createLead = async (leadData) => {
@@ -224,7 +224,7 @@ export const LeadProvider = ({ children }) => {
       fetchLeads();
       fetchStats();
     }
-  }, [isAuthenticated, fetchLeads, fetchStats]);
+  }, [isAuthenticated]);
 
   const value = {
     leads,

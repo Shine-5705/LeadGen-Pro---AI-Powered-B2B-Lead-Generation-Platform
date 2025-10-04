@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Users, 
   Building, 
   TrendingUp, 
+  DollarSign,
   Target,
   Zap,
   Star,
@@ -145,7 +146,7 @@ const Dashboard = () => {
     return { total, byStatus, topIndustries };
   }, []);
 
-  const calculateMatchScore = useCallback((lead) => {
+  const calculateMatchScore = (lead) => {
     if (!userPreferences) return 0;
     let score = 0;
     let maxScore = 0;
@@ -174,7 +175,7 @@ const Dashboard = () => {
       score += (matchedKeywords.length / keywords.length) * 15;
     }
     return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
-  }, [userPreferences]);
+  };
 
   const topMatches = useMemo(() => {
     if (!userPreferences) return [];
@@ -182,7 +183,7 @@ const Dashboard = () => {
       .map(lead => ({ ...lead, matchScore: calculateMatchScore(lead) }))
       .sort((a, b) => b.matchScore - a.matchScore)
       .slice(0, 5);
-  }, [userPreferences, calculateMatchScore]);
+  }, [userPreferences]);
 
   const recentLeads = SAMPLE_LEADS.slice(0, 5);
 

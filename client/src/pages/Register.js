@@ -218,13 +218,13 @@ const Register = () => {
             />
             <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
               I agree to the{' '}
-              <button type="button" className="text-blue-600 hover:text-blue-500 underline bg-transparent border-none cursor-pointer">
+              <a href="#" className="text-blue-600 hover:text-blue-500">
                 Terms of Service
-              </button>{' '}
+              </a>{' '}
               and{' '}
-              <button type="button" className="text-blue-600 hover:text-blue-500 underline bg-transparent border-none cursor-pointer">
+              <a href="#" className="text-blue-600 hover:text-blue-500">
                 Privacy Policy
-              </button>
+              </a>
             </label>
           </div>
 

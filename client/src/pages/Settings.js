@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   User, 
+  Mail, 
+  Building, 
   CreditCard, 
   Bell, 
   Shield,
   Key,
   Download,
+  Upload,
   Save
 } from 'lucide-react';
 
