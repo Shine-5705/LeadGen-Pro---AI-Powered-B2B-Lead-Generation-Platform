@@ -1,6 +1,15 @@
 # LeadGen Pro - AI-Powered B2B Lead Generation Platform
 
 A comprehensive lead generation platform that replicates and enhances the functionality of SaaSquatch Leads, featuring AI-powered email generation, web scraping, and advanced analytics.
+
+## 🚀 Live Demo
+
+**🌐 Frontend (Vercel):** [https://leadgenpro-black.vercel.app/](https://leadgenpro-black.vercel.app/)
+
+**⚡ Backend API (Render):** [https://leadgenpro-backend.onrender.com/](https://leadgenpro-backend.onrender.com/)
+
+*Try the live application with sample data and AI-powered features!*
+
 ---
 
 ## 🏗️ Architecture
@@ -14,6 +23,14 @@ A comprehensive lead generation platform that replicates and enhances the functi
 ---
 
 ## 📦 Features
+
+### **🎯 What You Can Do on the Live Demo:**
+- 📊 **Explore Dashboard** - View lead statistics and industry breakdown
+- 🏢 **Browse Sample Companies** - 8 pre-loaded realistic B2B companies
+- 🤖 **Generate AI Emails** - Create personalized outreach emails using OpenAI
+- 🎯 **Smart Matching** - See intelligent lead scoring based on preferences
+- 🔗 **Direct Engagement** - One-click LinkedIn, email, and maps integration
+- ⚙️ **Configure Preferences** - Set industry targets and business criteria
 
 ### 1. **User Management**
 - Registration, login, JWT authentication
@@ -116,15 +133,26 @@ A comprehensive lead generation platform that replicates and enhances the functi
 
 ## 🛠️ Setup & Usage
 
+### **🌐 Live Demo**
+Visit the live application: [https://leadgenpro-black.vercel.app/](https://leadgenpro-black.vercel.app/)
+
+### **🔧 Local Development**
+
 ### **1. Clone the Repository**
 ```bash
-git clone https://github.com/yourusername/LeadGen-Pro---AI-Powered-B2B-Lead-Generation-Platform.git
+git clone https://github.com/Shine-5705/LeadGen-Pro---AI-Powered-B2B-Lead-Generation-Platform.git
 cd LeadGen-Pro---AI-Powered-B2B-Lead-Generation-Platform
 ```
 
 ### **2. Install Dependencies**
 ```bash
-npm run install-all
+# Install server dependencies
+cd server
+npm install
+
+# Install client dependencies
+cd ../client
+npm install
 ```
 
 ### **3. Configure Environment**
@@ -137,16 +165,38 @@ OPENAI_API_KEY=your-openai-api-key
 NODE_ENV=development
 ```
 
+Create a `.env` file in `/client`:
+```
+REACT_APP_API_URL=http://localhost:5000
+```
+
 ### **4. Start the Application**
 ```bash
-npm run dev
+# Start backend server (from /server directory)
+npm start
+
+# Start frontend client (from /client directory)
+npm start
 ```
 - Frontend: http://localhost:3000
 - Backend: http://localhost:5000
 
-### **5. Demo Login**
-- Email: demo@leadgenpro.com
-- Password: demo123
+### **🚀 Deployment**
+
+**Frontend (Vercel):**
+- Deployed at: [https://leadgenpro-black.vercel.app/](https://leadgenpro-black.vercel.app/)
+- Environment variables: `REACT_APP_API_URL=https://leadgenpro-backend.onrender.com`
+
+**Backend (Render):**
+- Deployed at: [https://leadgenpro-backend.onrender.com/](https://leadgenpro-backend.onrender.com/)
+- Environment variables: MongoDB Atlas URI, OpenAI API Key, JWT Secret
+
+### **5. Demo Features**
+- ✅ Sample data with 8 realistic companies
+- ✅ AI-powered email generation
+- ✅ Intelligent lead matching
+- ✅ Direct engagement tools (LinkedIn, email, maps)
+- ✅ User preferences system
 
 ---
 
