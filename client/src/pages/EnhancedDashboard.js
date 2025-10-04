@@ -46,7 +46,7 @@ const EnhancedDashboard = () => {
 
   const loadSampleCompanies = async () => {
     try {
-      const response = await axios.get('/api/google/sample-companies');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/google/sample-companies`);
       setSampleCompanies(response.data.companies);
     } catch (error) {
       console.error('Failed to load sample companies:', error);
@@ -58,7 +58,7 @@ const EnhancedDashboard = () => {
 
     setIsSearching(true);
     try {
-      const response = await axios.post('/api/google/google-search', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/google/google-search`, {
         query: googleSearchQuery,
         limit: 20
       });

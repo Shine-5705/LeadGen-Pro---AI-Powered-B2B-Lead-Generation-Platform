@@ -44,7 +44,7 @@ export const LeadProvider = ({ children }) => {
         if (value) params.append(key, value);
       });
 
-      const response = await axios.get(`/api/leads?${params}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/leads?${params}`);
       setLeads(response.data.leads);
     } catch (error) {
       console.error('Failed to fetch leads:', error);
@@ -59,7 +59,7 @@ export const LeadProvider = ({ children }) => {
     if (!isAuthenticated) return;
     
     try {
-      const response = await axios.get('/api/leads/stats/overview');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/leads/stats/overview`);
       setStats(response.data.statusBreakdown);
     } catch (error) {
       console.error('Failed to fetch stats:', error);
@@ -69,7 +69,7 @@ export const LeadProvider = ({ children }) => {
   // Create lead
   const createLead = async (leadData) => {
     try {
-      const response = await axios.post('/api/leads', leadData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/leads`, leadData);
       setLeads(prev => [response.data, ...prev]);
       toast.success('Lead created successfully');
       return { success: true, lead: response.data };
@@ -83,7 +83,7 @@ export const LeadProvider = ({ children }) => {
   // Update lead
   const updateLead = async (leadId, leadData) => {
     try {
-      const response = await axios.put(`/api/leads/${leadId}`, leadData);
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/leads/${leadId}`, leadData);
       setLeads(prev => prev.map(lead => 
         lead._id === leadId ? response.data : lead
       ));
@@ -99,7 +99,7 @@ export const LeadProvider = ({ children }) => {
   // Delete lead
   const deleteLead = async (leadId) => {
     try {
-      await axios.delete(`/api/leads/${leadId}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/leads/${leadId}`);
       setLeads(prev => prev.filter(lead => lead._id !== leadId));
       toast.success('Lead deleted successfully');
       return { success: true };
@@ -113,7 +113,7 @@ export const LeadProvider = ({ children }) => {
   // Bulk create leads
   const bulkCreateLeads = async (leadsData) => {
     try {
-      const response = await axios.post('/api/leads/bulk', { leads: leadsData });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/leads/bulk`, { leads: leadsData });
       setLeads(prev => [...response.data.leads, ...prev]);
       toast.success(`${response.data.leads.length} leads created successfully`);
       return { success: true, leads: response.data.leads };
@@ -127,7 +127,7 @@ export const LeadProvider = ({ children }) => {
   // Scrape company data
   const scrapeCompany = async (website, companyName) => {
     try {
-      const response = await axios.post('/api/scraping/company', { website, companyName });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/scraping/company`, { website, companyName });
       toast.success('Company data scraped successfully');
       return { success: true, data: response.data };
     } catch (error) {
@@ -140,7 +140,7 @@ export const LeadProvider = ({ children }) => {
   // Generate AI email
   const generateEmail = async (leadData, emailType = 'cold-outreach') => {
     try {
-      const response = await axios.post('/api/ai/email', { leadData, emailType });
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ai/email`, { leadData, emailType });
       toast.success('Email generated successfully');
       return { success: true, email: response.data };
     } catch (error) {
@@ -153,7 +153,7 @@ export const LeadProvider = ({ children }) => {
   // Google search for companies
   const searchCompanies = async (query, location, industry, limit) => {
     try {
-      const response = await axios.post('/api/google/google-search', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/google/google-search`, {
         query,
         location,
         industry,
@@ -171,7 +171,7 @@ export const LeadProvider = ({ children }) => {
   // Load sample companies
   const loadSampleCompanies = async () => {
     try {
-      const response = await axios.get('/api/google/sample-companies');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/google/sample-companies`);
       return { success: true, companies: response.data.companies };
     } catch (error) {
       console.error('Failed to load sample companies:', error);
@@ -182,7 +182,7 @@ export const LeadProvider = ({ children }) => {
   // Export leads
   const exportLeads = async (format = 'csv', leadIds = null, exportFilters = {}) => {
     try {
-      const response = await axios.post(`/api/export/${format}`,
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/export/${format}`,
         {
           leadIds,
           filters: exportFilters

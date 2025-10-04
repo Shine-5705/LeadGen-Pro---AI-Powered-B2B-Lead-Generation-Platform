@@ -87,7 +87,7 @@ const AI = () => {
       const token = localStorage.getItem('token');
       
       // Create the email generation request with proper format
-      const response = await axios.post('http://localhost:5000/api/ai/email', {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/ai/email`, {
         leadData: {
           company: selectedLead.company,
           industry: selectedLead.industry,
