@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { 
   Search, 
   Filter, 
@@ -211,7 +211,7 @@ const LeadsEnhanced = () => {
   }, []);
 
   // Calculate match score for each lead based on user preferences
-  const calculateMatchScore = (lead) => {
+  const calculateMatchScore = useCallback((lead) => {
     if (!userPreferences) return 0;
 
     let score = 0;
@@ -259,7 +259,7 @@ const LeadsEnhanced = () => {
     }
 
     return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
-  };
+  }, [userPreferences]);
 
   // Filter and sort leads
   const filteredLeads = useMemo(() => {

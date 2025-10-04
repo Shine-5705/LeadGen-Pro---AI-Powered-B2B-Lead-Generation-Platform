@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Users, 
@@ -145,7 +145,7 @@ const Dashboard = () => {
     return { total, byStatus, topIndustries };
   }, []);
 
-  const calculateMatchScore = (lead) => {
+  const calculateMatchScore = useCallback((lead) => {
     if (!userPreferences) return 0;
     let score = 0;
     let maxScore = 0;
@@ -174,7 +174,7 @@ const Dashboard = () => {
       score += (matchedKeywords.length / keywords.length) * 15;
     }
     return maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
-  };
+  }, [userPreferences]);
 
   const topMatches = useMemo(() => {
     if (!userPreferences) return [];
