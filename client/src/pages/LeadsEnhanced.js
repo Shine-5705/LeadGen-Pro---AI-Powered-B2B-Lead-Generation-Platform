@@ -8,16 +8,12 @@ import {
   Globe,
   MapPin,
   Users,
-  ExternalLink,
-  MessageSquare,
   Zap,
-  Star,
   Send,
   Copy,
   Linkedin,
   Sparkles,
-  X,
-  CheckCircle
+  X
 } from 'lucide-react';
 
 // Sample Lead Data
@@ -303,7 +299,7 @@ const LeadsEnhanced = () => {
     result.sort((a, b) => b.matchScore - a.matchScore);
 
     return result;
-  }, [leads, searchTerm, statusFilter, industryFilter, userPreferences, showMatchesOnly]);
+  }, [leads, searchTerm, statusFilter, industryFilter, userPreferences, showMatchesOnly, calculateMatchScore]);
 
   const handleAIGenerate = (lead, type) => {
     setSelectedLead(lead);

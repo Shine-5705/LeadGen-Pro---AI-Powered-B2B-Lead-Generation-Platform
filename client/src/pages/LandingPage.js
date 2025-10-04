@@ -7,10 +7,7 @@ import {
   Bot, 
   BarChart3, 
   CheckCircle,
-  Zap,
-  Target,
-  TrendingUp,
-  Shield
+  Zap
 } from 'lucide-react';
 
 const LandingPage = () => {

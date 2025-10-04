@@ -1,14 +1,11 @@
 import React from 'react';
 import { useLeads } from '../contexts/LeadContext';
 import { 
-  BarChart3, 
   TrendingUp, 
   Users, 
   Target, 
   Mail, 
-  Phone,
   Globe,
-  Calendar,
   Download
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
