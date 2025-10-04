@@ -4,6 +4,7 @@ import {
   Users, 
   Building, 
   TrendingUp, 
+  DollarSign,
   Target,
   Zap,
   Star,
@@ -182,7 +183,7 @@ const Dashboard = () => {
       .map(lead => ({ ...lead, matchScore: calculateMatchScore(lead) }))
       .sort((a, b) => b.matchScore - a.matchScore)
       .slice(0, 5);
-  }, [userPreferences, calculateMatchScore]);
+  }, [userPreferences]);
 
   const recentLeads = SAMPLE_LEADS.slice(0, 5);
 

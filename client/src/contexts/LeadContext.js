@@ -224,7 +224,7 @@ export const LeadProvider = ({ children }) => {
       fetchLeads();
       fetchStats();
     }
-  }, [isAuthenticated, fetchLeads, fetchStats]);
+  }, [isAuthenticated]);
 
   const value = {
     leads,
